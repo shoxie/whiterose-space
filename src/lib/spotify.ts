@@ -20,6 +20,11 @@ const getAccessToken = async () => {
     },
     body: body,
   });
+
+  if (!response.ok) {
+    throw new Error("Failed to refresh Spotify access token");
+  }
+
   return response.json();
 };
 

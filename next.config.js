@@ -12,7 +12,7 @@ const nextConfig = {
     locales: ["vi"],
     defaultLocale: "vi",
   },
-  output: "standalone"
+  ...(process.env.BUILD_STANDALONE === "true" && { output: "standalone" }),
 };
 
 module.exports = withBundleAnalyzer(withContentlayer(nextConfig));

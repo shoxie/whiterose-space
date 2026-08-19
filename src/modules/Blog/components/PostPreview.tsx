@@ -20,8 +20,8 @@ const PostPreview = ({ post, idx }: { post: Post, idx: number }) => {
     }}
     className="flex flex-col space-y-5">
       <div className="flex flex-row items-center justify-between">
-        <Link href="/blog/[slug]" as={`/blog/${post.slug}`}>
-          <a className="text-2xl font-bold hover:underline">{post.title}</a>
+        <Link href={`/blog/${post.slug}`} className="text-2xl font-bold hover:underline">
+          {post.title}
         </Link>
         <time dateTime={post.date}>{moment(post.date).format("LL")}</time>
       </div>

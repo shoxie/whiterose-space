@@ -3,7 +3,6 @@ import siteMetadata from "data/siteMeta";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import moment from "moment";
 import { NewsArticleJsonLd, NextSeo } from "next-seo";
-import { pick } from "contentlayer/utils";
 // import PostLayout from "src/layouts/PostLayout";
 import components from "src/common/MDXComponents";
 import PagesLayout from "@/layouts/Pages";

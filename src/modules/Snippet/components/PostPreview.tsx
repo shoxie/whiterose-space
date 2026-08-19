@@ -7,8 +7,8 @@ const PostPreview = ({ snippet }: { snippet: Snippet }) => {
   return (
     <div className="flex flex-col space-y-5">
       <div className="flex flex-row items-center justify-between">
-        <Link href="/snippet/[slug]" as={`/snippet/${snippet.slug}`}>
-          <a className="text-2xl font-bold hover:underline">{snippet.title}</a>
+        <Link href={`/snippet/${snippet.slug}`} className="text-2xl font-bold hover:underline">
+          {snippet.title}
         </Link>
         <time dateTime={snippet.date}>{moment(snippet.date).format("LL")}</time>
       </div>

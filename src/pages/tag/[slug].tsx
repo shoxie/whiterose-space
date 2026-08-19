@@ -1,5 +1,5 @@
 import { allPosts, Post } from ".contentlayer/generated";
-import { pick } from "contentlayer/utils";
+import { pick } from "@/lib/pick";
 import moment from "moment";
 import { NextSeo } from "next-seo";
 import React from "react";
