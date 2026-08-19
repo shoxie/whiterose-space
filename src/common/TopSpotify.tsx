@@ -23,7 +23,7 @@ export default function TopTrackSpotify() {
   return (
     <div>
       <div className="mb-6 ">
-        <h3 className="text-2xl font-bold">My current top stream</h3>
+        <h3 className="font-display text-2xl font-black text-text">My current top stream</h3>
         <p className="text-lg text-subtle">
           It changes a lot, but I&apos;m sure you&apos;ll like it. Click to try :-)
         </p>

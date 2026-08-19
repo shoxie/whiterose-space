@@ -22,11 +22,11 @@ const Link: FC<LinkProps> = ({ selected, onClick, text, href }) => {
         opacity: 1
       }}
     >
-      <NextLink href={href} className="flex items-center justify-center w-full text-center">
+      <NextLink href={href} className="flex items-center justify-center w-full text-center transition-colors duration-200 hover:text-love">
         <span>{text}</span>
         {router.asPath === href && (
           <motion.div
-            className="absolute top-full left-0 w-full h-0.5 mt-1 rounded-2xl bg-highlightHigh"
+            className="absolute top-full left-0 w-full h-0.5 mt-1 rounded-2xl bg-love"
             layoutId="underline"
           />
         )}

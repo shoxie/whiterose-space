@@ -24,29 +24,34 @@ const Footer = () => {
   });
 
   return (
-    <footer className="max-w-screen-lg py-5 pt-5 mx-auto">
-      <div className="flex flex-row items-center justify-between pt-5 border-t border-highlightHigh">
-        <div className="flex flex-row items-center space-x-3">
+    <footer className="mx-auto max-w-screen-lg px-5 py-8">
+      <div className="flex flex-row items-center justify-between border-t border-highlightHigh pt-5">
+        <div className="flex min-w-0 flex-row items-center gap-3 text-sm">
           {data?.isPlaying ? (
-            <BsDiscFill className="animate-spin" />
+            <BsDiscFill
+              className="shrink-0 animate-spin text-love"
+              aria-hidden="true"
+            />
           ) : (
-            <BsPauseCircle />
+            <BsPauseCircle className="shrink-0 text-subtle" aria-hidden="true" />
           )}
           {data?.isPlaying ? (
             <a
               href={data.songUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="truncate"
-              title={data.title + "-" + data.artist}
+              className="truncate transition-colors hover:text-love"
+              title={data.title + " - " + data.artist}
             >
               {data.title} - {data.artist}
             </a>
           ) : (
-            <span>Not playing</span>
+            <span className="text-subtle">Not playing</span>
           )}
         </div>
-        <span>© 2022 WhiteRose</span>
+        <span className="shrink-0 text-sm text-subtle">
+          © {new Date().getFullYear()} WhiteRose
+        </span>
       </div>
     </footer>
   );

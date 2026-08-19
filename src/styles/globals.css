@@ -6,13 +6,12 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   color: rgb(var(--color-text));
   background-color: rgb(var(--color-base));
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
-  @apply transition-all duration-300
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  @apply transition-colors duration-300;
 }
 
 a {
@@ -24,42 +23,106 @@ a {
   box-sizing: border-box;
 }
 
-/* selector {
-  cursor: none;
-} */
-/* theme */
+::selection {
+  background: rgb(var(--color-iris) / 0.4);
+  color: rgb(var(--color-text));
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--color-iris));
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-base));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-highlight-high));
+  border-radius: 9999px;
+  border: 2px solid rgb(var(--color-base));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-iris));
+}
+
+/* ------------------------------------------------------------------ */
+/* Themes                                                              */
+/* ------------------------------------------------------------------ */
 
 .moon {
-  --color-base: 35 33 54;
-  --color-surface: 42 39 63;
-  --color-text: 224 222 244;
-  --color-pine: 62 143 176;
-  --color-iris: 144 122 169;
-  --color-highlight-low: 244 237 232;
-  --color-highlight-high: 86 82 110;
-  --color-love: 235 111 146;
-  --color-overlay: 57 53 82;
+  --color-base: 12 10 16;
+  --color-surface: 24 20 30;
+  --color-text: 231 227 239;
+  --color-subtle: 163 157 180;
+  --color-muted: 45 38 56;
+  --color-pine: 226 55 75;
+  --color-iris: 244 63 94;
+  --color-highlight-low: 255 107 122;
+  --color-highlight-high: 45 38 56;
+  --color-love: 242 109 133;
+  --color-overlay: 20 16 26;
+
+  --prism-bg: 18 16 28;
+  --prism-text: #e0def4;
+  --prism-muted: #908caa;
+  --prism-keyword: #eb6f92;
+  --prism-string: #f6c177;
+  --prism-tag: #9ccfd8;
+  --prism-class: #c4a7e7;
+  --prism-func: #ebbcba;
+  --prism-prop: #9ccfd8;
+  --prism-deleted: #eb6f92;
+  --prism-selection: #403d52;
+  --prism-line-bg: #403d52;
+  --prism-line-accent: #e0def4;
+  --prism-inserted: rgba(156 207 216 / 0.12);
+  --prism-removed: rgba(235 111 146 / 0.12);
 }
 
 .dawn {
-  --color-base: 250 244 237;
-  --color-surface: 255 250 243;
-  --color-text: 87 82 121;
-  --color-pine: 40 105 131;
-  --color-iris: 196 167 231;
-  --color-highlight-low: 42 40 62;
-  --color-highlight-high: 206 202 205;
-  --color-love: 180 99 122;
-  --color-overlay: 242 233 225;
+  --color-base: 247 244 240;
+  --color-surface: 255 255 255;
+  --color-text: 28 24 38;
+  --color-subtle: 90 84 102;
+  --color-muted: 224 216 208;
+  --color-pine: 158 18 40;
+  --color-iris: 190 24 52;
+  --color-highlight-low: 156 24 48;
+  --color-highlight-high: 224 216 208;
+  --color-love: 172 33 60;
+  --color-overlay: 240 235 228;
+
+  --prism-bg: 242 237 231;
+  --prism-text: #575279;
+  --prism-muted: #9893a5;
+  --prism-keyword: #b4637a;
+  --prism-string: #ea9d34;
+  --prism-tag: #56949f;
+  --prism-class: #907aa9;
+  --prism-func: #d7827e;
+  --prism-prop: #56949f;
+  --prism-deleted: #b4637a;
+  --prism-selection: #dfdad9;
+  --prism-line-bg: #e4dedb;
+  --prism-line-accent: #575279;
+  --prism-inserted: rgba(86 148 159 / 0.12);
+  --prism-removed: rgba(180 99 122 / 0.12);
 }
 
 .cursor {
-  background-color: none;
+  background-color: transparent;
   height: 50px;
   width: 50px;
   border-radius: 50%;
   border-width: 2px;
-  border-color: rgb(var(--color-iris));
+  border-color: rgb(var(--color-iris) / 0.8);
+  box-shadow: 0 0 12px rgb(var(--color-iris) / 0.35);
   position: fixed;
   top: 0;
   left: 0;
@@ -67,201 +130,204 @@ a {
   z-index: 1000;
 }
 
-/**
- * MIT License
- * Rosé Pine Theme
- * https://github.com/rose-pine
- * Ported for PrismJS by fvrests [@fvrests]
- */
+/* ------------------------------------------------------------------ */
+/* Prism syntax highlighting (theme-aware via CSS variables)           */
+/* ------------------------------------------------------------------ */
 
- code[class*="language-"],
- pre[class*="language-"] {
-   color: #e0def4;
-   text-align: left;
-   white-space: pre;
-   word-spacing: normal;
-   word-break: normal;
-   word-wrap: normal;
-   line-height: 1.5;
- 
-   -moz-tab-size: 4;
-   -o-tab-size: 4;
-   tab-size: 4;
- 
-   -webkit-hyphens: none;
-   -moz-hyphens: none;
-   -ms-hyphens: none;
-   hyphens: none;
- 
-   @media print {
-     text-shadow: none;
-   }
- }
- 
- /* Selection */
- code[class*="language-"]::-moz-selection,
- pre[class*="language-"]::-moz-selection,
- code[class*="language-"] ::-moz-selection,
- pre[class*="language-"] ::-moz-selection {
-   background: #403d52;
- }
- 
- code[class*="language-"]::selection,
- pre[class*="language-"]::selection,
- code[class*="language-"] ::selection,
- pre[class*="language-"] ::selection {
-   background: #403d52;
- }
- 
- /* Code (block & inline) */
- :not(pre) > code[class*="language-"],
- pre[class*="language-"] {
-   color: #e0def4;
-   background: #1f1d2e;
- }
- 
- /* Code blocks */
- pre[class*="language-"] {
-   padding: 1em;
-   margin: 0.5em 0;
-   overflow: auto;
- }
- 
- /* Inline code */
- :not(pre) > code[class*="language-"] {
-   padding: 0.1em;
-   border-radius: 0.3em;
-   white-space: normal;
-   color: #e0def4;
-   background: #1f1d2e;
- }
- 
- /* Text style & opacity */
- .token.entity {
-   cursor: help;
- }
- 
- .token.important,
- .token.bold {
-   font-weight: bold;
- }
- 
- .token.italic,
- .token.selector,
- .token.doctype,
- .token.attr-name,
- .token.inserted,
- .token.deleted,
- .token.comment,
- .token.prolog,
- .token.cdata,
- .token.constant,
- .token.parameter,
- .token.url {
-   font-style: italic;
- }
- 
- .token.url {
-   text-decoration: underline;
- }
- 
- .namespace {
-   opacity: 0.7;
- }
- 
- /* Syntax highlighting */
- .token.constant {
-   color: #e0def4;
- }
- 
- .token.comment,
- .token.prolog,
- .token.cdata,
- .token.punctuation {
-   color: #908caa;
- }
- 
- .token.delimiter,
- .token.important,
- .token.atrule,
- .token.operator,
- .token.keyword {
-   color: #31748f;
- }
- 
- .token.tag,
- .token.tag .punctuation,
- .token.doctype,
- .token.variable,
- .token.regex,
- .token.class-name,
- .token.selector,
- .token.inserted {
-   color: #9ccfd8;
- }
- 
- .token.boolean,
- .token.entity,
- .token.number,
- .token.symbol,
- .token.function {
-   color: #ebbcba;
- }
- 
- .token.string,
- .token.char,
- .token.property,
- .token.attr-value,
- .token.attr-value .punctuation {
-   color: #f6c177;
- }
- 
- .token.parameter,
- .token.url,
- .token.name,
- .token.attr-name,
- .token.builtin {
-   color: #c4a7e7;
- }
- 
- .token.deleted {
-   color: #eb6f92;
- }
- 
- /* Insertions & deletions */
- .token.inserted {
-   background: rgba(156 207 216 0.12);
- }
- 
- .token.deleted {
-   background: rgba(235 111 146 0.12);
- }
- 
- /* Line highlighting */
- pre[data-line] {
-   position: relative;
- }
- 
- pre[class*="language-"] > code[class*="language-"] {
-   position: relative;
-   z-index: 1;
- }
- 
- .line-highlight,
- .highlight-lines .highlighted {
-   position: absolute;
-   left: 0;
-   right: 0;
-   padding: inherit 0;
-   margin-top: 1em;
- 
-   background: #403d52;
-   box-shadow: inset 5px 0 0 #e0def4;
- 
-   z-index: 0;
- 
-   pointer-events: none;
- 
-   line-height: inherit;
-   white-space: pre;
- }
+code[class*='language-'],
+pre[class*='language-'] {
+  color: var(--prism-text);
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+
+  @media print {
+    text-shadow: none;
+  }
+}
+
+code[class*='language-']::-moz-selection,
+pre[class*='language-']::-moz-selection,
+code[class*='language-'] ::-moz-selection,
+pre[class*='language-'] ::-moz-selection {
+  background: var(--prism-selection);
+}
+
+code[class*='language-']::selection,
+pre[class*='language-']::selection,
+code[class*='language-'] ::selection,
+pre[class*='language-'] ::selection {
+  background: var(--prism-selection);
+}
+
+:not(pre) > code[class*='language-'],
+pre[class*='language-'] {
+  color: var(--prism-text);
+  background: rgb(var(--prism-bg));
+}
+
+pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+
+:not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+  color: var(--prism-text);
+  background: rgb(var(--prism-bg));
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic,
+.token.selector,
+.token.doctype,
+.token.attr-name,
+.token.inserted,
+.token.deleted,
+.token.comment,
+.token.prolog,
+.token.cdata,
+.token.constant,
+.token.parameter,
+.token.url {
+  font-style: italic;
+}
+
+.token.url {
+  text-decoration: underline;
+}
+
+.namespace {
+  opacity: 0.7;
+}
+
+.token.constant {
+  color: var(--prism-text);
+}
+
+.token.comment,
+.token.prolog,
+.token.cdata,
+.token.punctuation {
+  color: var(--prism-muted);
+}
+
+.token.delimiter,
+.token.important,
+.token.atrule,
+.token.operator,
+.token.keyword {
+  color: var(--prism-keyword);
+}
+
+.token.tag,
+.token.tag .punctuation,
+.token.doctype,
+.token.variable,
+.token.regex,
+.token.class-name,
+.token.selector,
+.token.inserted {
+  color: var(--prism-tag);
+}
+
+.token.boolean,
+.token.entity,
+.token.number,
+.token.symbol,
+.token.function {
+  color: var(--prism-func);
+}
+
+.token.string,
+.token.char,
+.token.property,
+.token.attr-value,
+.token.attr-value .punctuation {
+  color: var(--prism-string);
+}
+
+.token.parameter,
+.token.url,
+.token.name,
+.token.attr-name,
+.token.builtin {
+  color: var(--prism-class);
+}
+
+.token.deleted {
+  color: var(--prism-deleted);
+}
+
+.token.inserted {
+  background: var(--prism-inserted);
+}
+
+.token.deleted {
+  background: var(--prism-removed);
+}
+
+pre[data-line] {
+  position: relative;
+}
+
+pre[class*='language-'] > code[class*='language-'] {
+  position: relative;
+  z-index: 1;
+}
+
+.line-highlight,
+.highlight-lines .highlighted {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+
+  background: var(--prism-line-bg);
+  box-shadow: inset 5px 0 0 var(--prism-line-accent);
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  line-height: inherit;
+  white-space: pre;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

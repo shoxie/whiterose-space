@@ -64,10 +64,10 @@ const Pre = (props: any) => {
         <button
           aria-label="Copy code"
           type="button"
-          className={`absolute right-2 top-2 h-8 w-8 rounded border-2 p-1 ${
+          className={`absolute right-2 top-2 h-8 w-8 rounded border-2 p-1 transition-colors ${
             copied
-              ? "border-foam focus:border-foam focus:outline-none"
-              : "border-subtle"
+              ? "border-love focus:border-love focus:outline-none"
+              : "border-subtle hover:border-text"
           }`}
           onClick={onCopy}
         >
@@ -76,7 +76,7 @@ const Pre = (props: any) => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             fill="none"
-            className={copied ? "text-foam" : "text-subtle"}
+            className={copied ? "text-love" : "text-subtle"}
           >
             {copied ? (
               <>

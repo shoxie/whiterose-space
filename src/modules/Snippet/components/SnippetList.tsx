@@ -2,7 +2,7 @@ import { Snippet } from ".contentlayer/generated";
 import { AiOutlineSearch } from "react-icons/ai";
 import PostPreview from "./PostPreview";
 import { useState, useMemo } from "react";
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from "@mantine/hooks";
 
 const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
   const [search, setSearch] = useState("");
@@ -19,26 +19,28 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 
   return (
     <>
-      <div className="flex flex-col items-start w-full pb-5 space-y-4">
-        <span>
-          Total of {snippets.length} post(s) written. Use search bar below to
-          search for title.
-        </span>
-        <div className="relative w-3/4">
+      <div className="flex w-full flex-col items-start space-y-4 pb-6">
+        <span className="text-subtle">Tổng cộng {snippets.length} snippets.</span>
+        <div className="relative w-full max-w-md">
+          <label htmlFor="snippet-search" className="sr-only">
+            Tìm snippet theo tiêu đề
+          </label>
           <input
+            id="snippet-search"
             type="text"
-            className="w-full pl-4 border border-highlightHigh rounded-md bg-base focus:outline-none py-1.5"
-            placeholder="Search by title"
+            className="w-full rounded-lg border border-highlightHigh bg-surface py-2.5 pl-4 pr-11 text-text placeholder:text-subtle focus:outline-none focus:ring-2 focus:ring-love/60"
+            placeholder="Tìm theo tiêu đề..."
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="absolute right-3 top-2">
-            <AiOutlineSearch className="text-xl" />
-          </div>
+          <AiOutlineSearch
+            className="pointer-events-none absolute right-3.5 top-3 text-xl text-subtle"
+            aria-hidden="true"
+          />
         </div>
       </div>
-      <div className="flex flex-col pt-5 space-y-5">
-        {filteredPosts.map((post, idx) => (
-          <PostPreview key={idx} snippet={post} />
+      <div className="flex flex-col space-y-5 pt-2">
+        {filteredPosts.map((post) => (
+          <PostPreview key={post.slug} snippet={post} />
         ))}
       </div>
     </>

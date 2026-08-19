@@ -33,10 +33,10 @@ export default function SnippetLayout({
       <div className="fixed top-0 left-0 z-50 w-full">
         <motion.div
           animate={{ opacity: percent > 0 ? 1 : 0 }}
-          className="h-1 bg-hightlight-high"
+          className="h-1 bg-highlightHigh"
         >
           <motion.div
-            className="h-1 bg-iris"
+            className="h-1 bg-love"
             animate={{ scaleX: percent }}
             style={{ originX: 0, originY: 0 }}
           />
@@ -45,18 +45,20 @@ export default function SnippetLayout({
       <Header />
       <div className="max-w-screen-lg px-5 mx-auto lg:px-0">
         <article>
-          <p className="text-subtle">{moment(snippet.date).format("LL")}</p>
-          <div className="flex items-center gap-3 mb-4 ">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-subtle">
+            {moment(snippet.date).format("LL")}
+          </p>
+          <div className="flex items-center gap-3 mb-4 mt-2">
             <img
               src={snippet.logo}
               alt=""
               className="object-contain rounded-full w-14"
             />
-            <h1 className="text-3xl font-bold text-rose md:text-5xl">
+            <h1 className="font-display text-3xl font-black text-pine md:text-5xl">
               {snippet.title}
             </h1>
           </div>
-          <div className=" border-b-[1px] pb-4 border-muted">
+          <div className=" border-b border-highlightHigh pb-4">
             <p className="text-lg text-text">{snippet.description}</p>
           </div>
           <div className="mt-8 prose prose-xl" ref={ref}>

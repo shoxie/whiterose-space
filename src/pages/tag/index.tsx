@@ -10,8 +10,9 @@ export default function TagPage({ tags }: { tags: Tag[] }) {
     <PagesLayout>
         <div>
       <NextSeo title="Tags" description="All the blog's tag on this website." />
-      <div className="border-b-[1px] pb-5 border-muted mb-10">
-        <h1 className="text-3xl font-bold tracking-wide uppercase md:text-5xl text-text sm:leading-10 md:leading-14">
+      <div className="border-b border-highlightHigh pb-5 mb-10">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.5em] text-love">札</p>
+        <h1 className="font-display text-4xl font-black tracking-tight text-text md:text-6xl">
           Tags
         </h1>
       </div>

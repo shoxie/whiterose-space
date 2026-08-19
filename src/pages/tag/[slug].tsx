@@ -21,6 +21,12 @@ export default function TagViewPage({
         description={`All the blog with ${tagName} tag`}
       />
       <PagesLayout>
+        <div className="border-b border-highlightHigh pb-6 mb-10">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.5em] text-love">札</p>
+          <h1 className="font-display text-4xl font-black tracking-tight text-text md:text-5xl">
+            #{tagName}
+          </h1>
+        </div>
         <BlogList posts={posts} />
       </PagesLayout>
     </>
