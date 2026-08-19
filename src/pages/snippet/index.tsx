@@ -1,7 +1,7 @@
 import { allSnippets, Snippet } from ".contentlayer/generated";
+import { pick } from "@/lib/pick";
 import TopTrackSpotify from "@/common/TopSpotify";
 import PagesLayout from "@/layouts/Pages";
-import { pick } from "contentlayer/utils";
 import moment from "moment";
 import { NextSeo } from "next-seo";
 import SnippetList from "@/modules/Snippet/components/SnippetList";

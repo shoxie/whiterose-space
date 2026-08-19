@@ -1,6 +1,6 @@
 import moment from "moment";
 import { allPosts, Post } from ".contentlayer/generated";
-import { pick } from "contentlayer/utils";
+import { pick } from "@/lib/pick";
 import PagesLayout from "@/layouts/Pages";
 import { NextSeo } from "next-seo";
 import BlogList from "@/modules/Blog/components/BlogList";

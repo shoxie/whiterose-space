@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import UndelinedLinks from "@/common/UnderlinedLinks";
 import Logo from "public/logo.svg";
 import Image from "next/image";
-import { GoThreeBars } from "react-icons/go";
+import { GoKebabHorizontal } from "react-icons/go";
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 
@@ -52,19 +52,17 @@ const Header = () => {
     <>
       <header className="max-w-screen-xl px-10 py-5 mx-auto">
         <div className="flex-row items-center justify-between hidden lg:flex">
-          <motion.div
-            initial={{ x: -100, opacity: 0 }}
-            animate={{
-              x: 0,
-              opacity: 1,
-            }}
-          >
-            <Link href="/" passHref>
-              <a className="text-2xl font-bold">
-                <Image src={Logo.src} alt="logo" width={50} height={50} />
-              </a>
+            <motion.div
+              initial={{ x: -100, opacity: 0 }}
+              animate={{
+                x: 0,
+                opacity: 1,
+              }}
+            >
+            <Link href="/" className="text-2xl font-bold">
+              <Image src={Logo.src} alt="logo" width={50} height={50} />
             </Link>
-          </motion.div>
+            </motion.div>
           <motion.div initial={{
             opacity: 0,
             x: 100,
@@ -126,13 +124,11 @@ const Header = () => {
             type="button"
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
           >
-            <GoThreeBars />
+            <GoKebabHorizontal />
           </button>
           <div>
-            <Link href="/" passHref>
-              <a className="text-2xl font-bold">
-                <Image src={Logo.src} alt="logo" width={50} height={50} />
-              </a>
+            <Link href="/" className="text-2xl font-bold">
+              <Image src={Logo.src} alt="logo" width={50} height={50} />
             </Link>
           </div>
           <div
@@ -176,7 +172,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div
           style={{
             height: `calc(100vh - ${headerHeight}px)`,
@@ -190,7 +186,7 @@ const Header = () => {
         >
           <div className="flex flex-col space-y-5">
             {menuItems.map((nav, idx) => (
-              <Link key={nav.name} href={nav.href}>
+              <Link key={nav.name} href={nav.href} legacyBehavior>
                 <motion.a
                   key={nav.name}
                   className={classNames(

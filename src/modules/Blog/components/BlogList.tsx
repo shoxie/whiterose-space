@@ -38,7 +38,7 @@ const BlogList = ({ posts }: { posts: Post[] }) => {
         </div>
       </div>
       <div className="flex flex-col pt-5 space-y-5">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {filteredPosts.map((post, idx) => (
             <PostPreview key={idx} post={post} idx={idx} />
           ))}

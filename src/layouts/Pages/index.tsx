@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useViewportScroll, Variants } from "framer-motion";
+import { AnimatePresence, motion, useScroll, Variants } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Footer from "./components/footer";
@@ -19,7 +19,7 @@ const PagesLayout = ({ children }: Props) => {
   const router = useRouter();
   const [percent, setpercent] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     const unsub = scrollY.onChange((value) => {
@@ -117,7 +117,7 @@ const PagesLayout = ({ children }: Props) => {
       >
         <AiOutlineArrowUp className="text-xl" />
       </motion.button>
-      <AnimatePresence initial={false} exitBeforeEnter>
+      <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={router.asPath}
           initial={{

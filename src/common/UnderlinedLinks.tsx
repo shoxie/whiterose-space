@@ -22,8 +22,7 @@ const Link: FC<LinkProps> = ({ selected, onClick, text, href }) => {
         opacity: 1
       }}
     >
-      <NextLink href={href} passHref>
-        <a className="flex items-center justify-center w-full text-center">
+      <NextLink href={href} className="flex items-center justify-center w-full text-center">
         <span>{text}</span>
         {router.asPath === href && (
           <motion.div
@@ -31,7 +30,6 @@ const Link: FC<LinkProps> = ({ selected, onClick, text, href }) => {
             layoutId="underline"
           />
         )}
-        </a>
       </NextLink>
     </motion.div>
   );

@@ -25,7 +25,7 @@ const computedFields: ComputedFields = {
 
 const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: "post/**/*.mdx",
+  filePathPattern: "posts/**/*.mdx",
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
@@ -81,6 +81,7 @@ const Page = defineDocumentType(() => ({
 
 const contentLayerConfig = makeSource({
   contentDirPath: "data",
+  disableImportAliasWarning: true,
   documentTypes: [Post, Snippet, Page],
   mdx: {
     remarkPlugins: [remarkGfm, remarkMath, remarkImgToJsx],

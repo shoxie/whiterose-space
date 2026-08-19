@@ -21,7 +21,7 @@ function MyApp({
       defaultTheme="moon"
       themes={["moon", "dawn"]}
     >
-      <AnimatePresence initial={false} exitBeforeEnter>
+      <AnimatePresence initial={false}>
         <motion.div
           key={router.asPath}
           initial={{

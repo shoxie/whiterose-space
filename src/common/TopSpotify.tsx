@@ -29,7 +29,7 @@ export default function TopTrackSpotify() {
         </p>
       </div>
       <div className="space-y-3">
-        {data?.tracks.map((track, index) => (
+        {data?.tracks?.map((track, index) => (
           <Track
             key={track.title}
             selected={selected}

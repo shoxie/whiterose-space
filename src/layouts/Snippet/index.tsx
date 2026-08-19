@@ -1,5 +1,5 @@
 import { Snippet } from ".contentlayer/generated";
-import { motion, useViewportScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../Pages/components/header";
@@ -14,7 +14,7 @@ export default function SnippetLayout({
 }) {
   const [percent, setpercent] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     const unsub = scrollY.onChange((value) => {
