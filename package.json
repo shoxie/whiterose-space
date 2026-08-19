@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "24.x"
+  },
   "dependencies": {
     "@giscus/react": "^3.1.0",
     "@mantine/core": "^6.0.22",
