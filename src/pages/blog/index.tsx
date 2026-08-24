@@ -11,17 +11,17 @@ export default function BlogPage({ posts }: { posts: Post[] }) {
     <>
       <NextSeo title="Blog" description="All of the blog on this website." />
       <PagesLayout>
-        <div className="border-b border-highlightHigh pb-8 mb-10">
-          <p className="mb-2 text-xs tracking-[0.5em] text-love">記事</p>
-          <h1 className="font-display text-4xl font-black tracking-tight text-text md:text-6xl">
-            Bài viết
-          </h1>
-          <p className="mt-3 text-subtle">
+        <header className="mb-12">
+          <p className="secnum">01 — BLOG</p>
+          <h2 className="h2">
+            Bài viết <em>viết</em> về code
+          </h2>
+          <p className="max-w-[62ch] text-[15px] leading-[1.75] text-[var(--muted)]">
             Những bài viết về code, ServiceNow và mọi thứ linh tinh.
           </p>
-        </div>
+        </header>
         <BlogList posts={posts} />
-        <div className="pt-10 mt-10 border-t border-highlightHigh">
+        <div className="pt-10 mt-10 border-t border-[var(--line)]">
           <TopTrackSpotify />
         </div>
       </PagesLayout>

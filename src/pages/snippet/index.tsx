@@ -14,17 +14,17 @@ export default function BlogPage({ snippets }: { snippets: Snippet[] }) {
         description="Những đoạn code nhỏ, tiện dụng."
       />
       <PagesLayout>
-        <div className="border-b border-highlightHigh pb-8 mb-10">
-          <p className="mb-2 text-xs tracking-[0.5em] text-love">コード</p>
-          <h1 className="font-display text-4xl font-black tracking-tight text-text md:text-6xl">
-            Snippets
-          </h1>
-          <p className="mt-3 text-subtle">
+        <header className="mb-12">
+          <p className="secnum">02 — SNIPPET</p>
+          <h2 className="h2">
+            Đoạn code <em>nhỏ</em>, tiện dụng
+          </h2>
+          <p className="max-w-[62ch] text-[15px] leading-[1.75] text-[var(--muted)]">
             Những đoạn code nhỏ mà tôi muốn giữ lại.
           </p>
-        </div>
+        </header>
         <SnippetList snippets={snippets} />
-        <div className="pt-10 mt-10 border-t border-highlightHigh">
+        <div className="pt-10 mt-10 border-t border-[var(--line)]">
           <TopTrackSpotify />
         </div>
       </PagesLayout>

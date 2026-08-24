@@ -1,189 +1,183 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
-import { motion, AnimatePresence } from "framer-motion";
-import UndelinedLinks from "@/common/UnderlinedLinks";
-import { GoKebabHorizontal } from "react-icons/go";
-import { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const menuItems = [
+const NAV = [
+  { href: "/blog", label: "Blog" },
+  { href: "/snippet", label: "Snippet" },
+  { href: "/about", label: "About" },
+  { href: "/static/CV.pdf", label: "CV", external: true },
   {
-    name: "Blog",
-    href: "/blog",
-    mobile: false,
-  },
-  {
-    name: "Snippet",
-    href: "/snippet",
-    mobile: false,
-  },
-  {
-    name: "About",
-    href: "/about",
-    mobile: false,
-  },
-  {
-    name: "My resume",
-    href: "/static/CV.pdf",
-    mobile: false,
-  },
-  {
-    name: "Wordie game",
     href: "https://wordie-game.vercel.app/",
-    mobile: false,
+    label: "Wordie",
+    external: true,
   },
 ];
 
-const Wordmark = () => (
-  <Link
-    href="/"
-    className="group flex items-center gap-2 text-xl"
-    aria-label="WhiteRose Space — về trang chủ"
-  >
-    <span
-      className="font-display text-2xl font-black tracking-tight text-text transition-colors duration-200 group-hover:text-love"
-      aria-hidden="true"
-    >
-      WhiteRose
-    </span>
-    <span
-      className="text-xs font-semibold tracking-[0.3em] text-love"
-      aria-hidden="true"
-    >
-      白薔薇
-    </span>
-  </Link>
-);
+const SOCIALS = [{ href: "https://github.com/shoxie", label: "GitHub" }];
 
-const ThemeToggle = () => {
+/** Theme pill — same visual grammar as the portfolio's langswitch. */
+function ThemePill({ variant }: { variant?: "mob" }) {
   const { theme, setTheme } = useTheme();
-  const isDark = theme === "moon";
-  return (
+  const pick = (t: "moon" | "dawn") => (
     <button
       type="button"
-      onClick={() => setTheme(isDark ? "dawn" : "moon")}
-      aria-label={isDark ? "Chuyển sang theme sáng" : "Chuyển sang theme tối"}
-      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-highlightHigh text-xl transition-colors duration-200 hover:border-love"
+      className={`langswitch__btn ${theme === t ? "is-active" : ""}`}
+      aria-pressed={theme === t}
+      onClick={() => setTheme(t)}
     >
-      <AnimatePresence initial={false} mode="wait">
-        <motion.span
-          key={isDark ? "sun" : "moon"}
-          initial={{ opacity: 0, rotate: -90, scale: 0.6 }}
-          animate={{ opacity: 1, rotate: 0, scale: 1 }}
-          exit={{ opacity: 0, rotate: 90, scale: 0.6 }}
-          transition={{ duration: 0.25 }}
-          className="absolute"
-          aria-hidden="true"
-        >
-          {isDark ? (
-            <BsFillSunFill className="text-[#F6C177]" />
-          ) : (
-            <BsFillMoonFill className="text-text" />
-          )}
-        </motion.span>
-      </AnimatePresence>
+      {variant === "mob"
+        ? t === "moon"
+          ? "Moon (tối)"
+          : "Dawn (sáng)"
+        : t === "moon"
+          ? "MOON"
+          : "DAWN"}
     </button>
   );
-};
+  return (
+    <div
+      className={`langswitch ${variant === "mob" ? "langswitch--mob" : ""}`}
+      role="group"
+      aria-label="Theme / Giao diện"
+    >
+      {pick("moon")}
+      {pick("dawn")}
+    </div>
+  );
+}
 
-const Header = () => {
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const headerContainer = useRef<HTMLDivElement>(null);
+export default function Header() {
+  const [solid, setSolid] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const lastY = useRef(0);
+  const navOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!headerContainer) return;
-    setHeaderHeight(headerContainer.current?.clientHeight ?? 0);
-  }, [headerContainer]);
+    navOpenRef.current = navOpen;
+  }, [navOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = mobileNavOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
+    let ticking = false;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setSolid(y > 40);
+      setHidden(navOpenRef.current ? false : y > lastY.current && y > 400);
+      lastY.current = y;
+      ticking = false;
     };
-  }, [mobileNavOpen]);
+    const handler = () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  const closeNav = useCallback(() => setNavOpen(false), []);
+
+  useEffect(() => {
+    document.body.classList.toggle("is-locked", navOpen);
+    return () => document.body.classList.remove("is-locked");
+  }, [navOpen]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && navOpen) setNavOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navOpen]);
 
   return (
     <>
-      <header className="relative z-50 mx-auto max-w-screen-xl px-5 py-5 md:px-10">
-        <div className="flex-row items-center justify-between hidden lg:flex">
-          <motion.div
-            initial={{ x: -40, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Wordmark />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex-row items-center justify-center hidden space-x-6 lg:flex"
-          >
-            <UndelinedLinks items={menuItems} />
-            <ThemeToggle />
-          </motion.div>
-        </div>
-        <div
-          className="flex items-center justify-between lg:hidden"
-          ref={headerContainer}
+      <header
+        className={`header ${solid ? "is-solid" : ""} ${
+          hidden && !navOpen ? "is-hidden" : ""
+        }`}
+      >
+        <Link className="header__brand" href="/">
+          <span className="header__dot" />
+          <span className="header__name">WhiteRose</span>
+          <span className="header__alias">/ 白薔薇</span>
+        </Link>
+        <nav className="header__nav" aria-label="Primary">
+          {NAV.map((n) =>
+            n.external ? (
+              <a key={n.href} href={n.href} target="_blank" rel="noopener">
+                {n.label}
+              </a>
+            ) : (
+              <Link key={n.href} href={n.href}>
+                {n.label}
+              </Link>
+            ),
+          )}
+        </nav>
+        <ThemePill />
+        <button
+          className="header__burger"
+          aria-label={navOpen ? "Đóng menu" : "Mở menu"}
+          aria-expanded={navOpen}
+          aria-controls="mobileNav"
+          onClick={() => setNavOpen((v) => !v)}
         >
-          <button
-            type="button"
-            onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            aria-label={mobileNavOpen ? "Đóng menu" : "Mở menu"}
-            aria-expanded={mobileNavOpen}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-highlightHigh text-xl transition-colors hover:border-love"
-          >
-            <GoKebabHorizontal aria-hidden="true" />
-          </button>
-          <Wordmark />
-          <ThemeToggle />
-        </div>
+          <span />
+          <span />
+        </button>
       </header>
+
       <AnimatePresence>
-        {mobileNavOpen && (
+        {navOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            style={{
-              top: headerHeight ?? 0,
-              height: `calc(100vh - ${headerHeight}px)`,
-            }}
-            className="fixed left-0 z-40 w-screen bg-base/95 lg:hidden backdrop-blur-sm"
-            onClick={() => setMobileNavOpen(false)}
+            id="mobileNav"
+            className="mobnav"
+            aria-hidden={!navOpen}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            <nav
-              className="flex flex-col space-y-3 px-8 pt-10"
-              aria-label="Mobile menu"
-            >
-              {menuItems.map((nav, idx) => (
-                <motion.div
-                  key={nav.name}
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.08 + idx * 0.06 }}
-                >
-                  <Link
-                    href={nav.href}
-                    className={classNames(
-                      "block border-b border-highlightHigh py-4 font-display text-2xl font-bold text-text transition-colors hover:text-love"
-                    )}
-                    onClick={() => setMobileNavOpen(false)}
+            <nav className="mobnav__list">
+              {NAV.map((n, i) =>
+                n.external ? (
+                  <a
+                    key={n.href}
+                    href={n.href}
+                    target="_blank"
+                    rel="noopener"
+                    onClick={closeNav}
                   >
-                    {nav.name}
+                    <em>0{i + 1}</em> <span>{n.label}</span>
+                  </a>
+                ) : (
+                  <Link key={n.href} href={n.href} onClick={closeNav}>
+                    <em>0{i + 1}</em> <span>{n.label}</span>
                   </Link>
-                </motion.div>
-              ))}
+                ),
+              )}
             </nav>
+            <ThemePill variant="mob" />
+            <div className="mobnav__social">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={closeNav}
+                >
+                  {s.label}
+                </a>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
   );
-};
-
-export default Header;
+}

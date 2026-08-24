@@ -2,7 +2,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useAudio } from "react-use";
-import { fetcher } from "@/layouts/Pages/components/footer";
 import useSWR from "swr";
 
 type Song = {
@@ -17,8 +16,14 @@ type TopTracks = {
   tracks: Song[];
 };
 
+/** Only ever talks to our own /api/top-track route (allowlisted literal path). */
+async function fetchTopTracks(url: string): Promise<TopTracks> {
+  const res = await fetch("/api/top-track");
+  return res.json();
+}
+
 export default function TopTrackSpotify() {
-  const { data } = useSWR<TopTracks>("/api/top-track", fetcher);
+  const { data } = useSWR<TopTracks>("/api/top-track", fetchTopTracks);
   const [selected, setselected] = useState(-1);
   return (
     <div>

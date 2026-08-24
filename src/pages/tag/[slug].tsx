@@ -1,17 +1,19 @@
-import { allPosts, Post } from ".contentlayer/generated";
+import { allPosts, allSnippets, Post, Snippet } from ".contentlayer/generated";
 import { pick } from "@/lib/pick";
 import moment from "moment";
 import { NextSeo } from "next-seo";
-import React from "react";
 import BlogList from "@/modules/Blog/components/BlogList";
+import SnippetList from "@/modules/Snippet/components/SnippetList";
 import { allTags } from "src/lib/tags";
 import PagesLayout from "@/layouts/Pages";
 
 export default function TagViewPage({
   posts,
+  snippets,
   tagName,
 }: {
   posts: Post[];
+  snippets: Snippet[];
   tagName: string;
 }) {
   return (
@@ -21,13 +23,25 @@ export default function TagViewPage({
         description={`All the blog with ${tagName} tag`}
       />
       <PagesLayout>
-        <div className="border-b border-highlightHigh pb-6 mb-10">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.5em] text-love">札</p>
-          <h1 className="font-display text-4xl font-black tracking-tight text-text md:text-5xl">
-            #{tagName}
-          </h1>
-        </div>
-        <BlogList posts={posts} />
+        <header className="mb-12">
+          <p className="secnum">CHỦ ĐỀ</p>
+          <h2 className="h2">#{tagName}</h2>
+          <p className="max-w-[62ch] text-[15px] leading-[1.75] text-[var(--muted)]">
+            {posts.length + snippets.length} bài viết thuộc chủ đề này.
+          </p>
+        </header>
+        {posts.length > 0 && (
+          <section className="mb-14">
+            <p className="secnum">Bài viết</p>
+            <BlogList posts={posts} />
+          </section>
+        )}
+        {snippets.length > 0 && (
+          <section>
+            <p className="secnum">Snippet</p>
+            <SnippetList snippets={snippets} />
+          </section>
+        )}
       </PagesLayout>
     </>
   );
@@ -48,5 +62,11 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     .filter((post) => post.draft !== true && post.tags.includes(slug))
     .map((blog) => pick(blog, ["slug", "title", "summary", "date", "tags"]))
     .sort((a, b) => moment(b.date).diff(moment(a.date)));
-  return { props: { posts, tagName: slug } };
+  const snippets = allSnippets
+    .filter((snippet) => snippet.tags.includes(slug))
+    .map((snippet) =>
+      pick(snippet, ["slug", "title", "description", "date", "tags"]),
+    )
+    .sort((a, b) => moment(b.date).diff(moment(a.date)));
+  return { props: { posts, snippets, tagName: slug } };
 }

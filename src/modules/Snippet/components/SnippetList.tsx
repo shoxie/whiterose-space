@@ -19,8 +19,8 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-start space-y-4 pb-6">
-        <span className="text-subtle">Tổng cộng {snippets.length} snippets.</span>
+      <div className="flex w-full flex-col items-start space-y-4 pb-8">
+        <p className="secnum !mb-0">Tổng cộng {snippets.length} snippets</p>
         <div className="relative w-full max-w-md">
           <label htmlFor="snippet-search" className="sr-only">
             Tìm snippet theo tiêu đề
@@ -28,17 +28,18 @@ const SnippetList = ({ snippets }: { snippets: Snippet[] }) => {
           <input
             id="snippet-search"
             type="text"
-            className="w-full rounded-lg border border-highlightHigh bg-surface py-2.5 pl-4 pr-11 text-text placeholder:text-subtle focus:outline-none focus:ring-2 focus:ring-love/60"
+            className="w-full border-0 border-b bg-transparent py-2.5 pl-0 pr-9 text-[15px] text-[var(--ink)] outline-none transition-colors placeholder:text-[var(--muted)] focus:border-b focus:border-[var(--accent)]"
+            style={{ borderBottom: "1px solid var(--line)" }}
             placeholder="Tìm theo tiêu đề..."
             onChange={(e) => setSearch(e.target.value)}
           />
           <AiOutlineSearch
-            className="pointer-events-none absolute right-3.5 top-3 text-xl text-subtle"
+            className="pointer-events-none absolute right-1 top-3 text-xl text-[var(--muted)]"
             aria-hidden="true"
           />
         </div>
       </div>
-      <div className="flex flex-col space-y-5 pt-2">
+      <div className="grid gap-5 pt-2">
         {filteredPosts.map((post) => (
           <PostPreview key={post.slug} snippet={post} />
         ))}

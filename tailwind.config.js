@@ -29,7 +29,22 @@ module.exports = {
     extend: {
       colors: themeColors,
       fontFamily: {
-        display: ['"Noto Serif JP"', 'serif'],
+        display: ['"Instrument Serif"', '"Times New Roman"', "serif"],
+        sans: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "system-ui",
+          "sans-serif",
+        ],
+        mono: [
+          '"JetBrains Mono"',
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "monospace",
+        ],
       },
       typography: (theme) => ({
         DEFAULT: {

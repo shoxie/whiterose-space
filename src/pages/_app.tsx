@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import { DefaultSeo } from "next-seo";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Analytics } from "@vercel/analytics/react";
+import { Grain, Scanline } from "@/common/Overlays";
 
 function MyApp({
   Component,
@@ -23,6 +24,8 @@ function MyApp({
       defaultTheme="moon"
       themes={["moon", "dawn"]}
     >
+      <Grain />
+      <Scanline />
       <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={router.asPath}
@@ -70,7 +73,7 @@ function MyApp({
                 {
                   rel: "mask-icon",
                   href: "/static/favicon/safari-pinned-tab.svg",
-                  color: "#E11D2E",
+                  color: "#E0A244",
                 },
                 {
                   rel: "alternate",

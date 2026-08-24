@@ -3,11 +3,11 @@ import siteMetadata from "data/siteMeta";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import moment from "moment";
 import { NewsArticleJsonLd, NextSeo } from "next-seo";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 // import PostLayout from "src/layouts/PostLayout";
 import components from "src/common/MDXComponents";
 import PagesLayout from "@/layouts/Pages";
-import Tags from "@/common/Tags";
 import Giscus from "@giscus/react";
 
 export default function BlogDetailPage({ post }: { post: Post }) {
@@ -17,21 +17,23 @@ export default function BlogDetailPage({ post }: { post: Post }) {
     <PagesLayout>
       <SEO post={post} />
       <article>
-        <header className="mb-8 border-b border-highlightHigh pb-6">
-          <h1 className="font-display text-4xl font-black leading-tight text-text md:text-5xl">
-            {post.title}
-          </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-subtle">
+        <header className="mb-10 border-b border-[var(--line)] pb-8">
+          <p className="secnum !mb-4">
             <time dateTime={post.date} title={moment(post.date).format("LL")}>
               {moment(post.date).format("LL")}
             </time>
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true"> · </span>
             <span>{post.readingTime.text}</span>
-          </div>
-          <p className="mt-4 text-lg text-subtle">{post.summary}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          </p>
+          <h1 className="h2">{post.title}</h1>
+          <p className="max-w-[62ch] text-[15px] leading-[1.75] text-[var(--muted)]">
+            {post.summary}
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
             {post.tags?.map((tag) => (
-              <Tags key={tag} content={tag} />
+              <Link key={tag} href={`/tag/${tag}`} className="chip">
+                {tag}
+              </Link>
             ))}
           </div>
         </header>

@@ -1,16 +1,20 @@
-import { allPosts } from ".contentlayer/generated";
+import { allPosts, allSnippets } from ".contentlayer/generated";
 
 export type Tag = {
   name: string;
   count: number;
 };
 
+/**
+ * Tags are site-wide: they aggregate blog posts AND snippets so that every
+ * tag rendered by any page has a matching /tag/[slug] route.
+ */
 export function allTags() {
-  const posts = allPosts;
+  const docs = [...allPosts, ...allSnippets];
   const tags: Tag[] = [];
-  for (const post of posts) {
-    if (post.draft == true) continue;
-    for (const tag of post.tags) {
+  for (const doc of docs) {
+    if ((doc as { draft?: boolean }).draft == true) continue;
+    for (const tag of doc.tags) {
       const existingTag = tags.find((t) => t.name === tag);
       if (existingTag) {
         existingTag.count++;
