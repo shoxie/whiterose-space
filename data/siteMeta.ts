@@ -1,7 +1,7 @@
 const siteMeta = {
     siteUrl: "https://wrosedev.tech",
     title: "WhiteRose Space",
-    description: "A place where WhiteRose gone mad with tech.",
+    description: "Blog của một cựu web developer, giờ là ServiceNow developer. Viết về code và những thứ linh tinh.",
     author: "Đào Tuấn Anh",
     email: "doctorwrose@gmail.com",
     github: "https://github.com/shoxie",

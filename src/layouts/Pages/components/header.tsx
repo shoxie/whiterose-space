@@ -1,211 +1,183 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
-import { motion, AnimatePresence } from "framer-motion";
-import UndelinedLinks from "@/common/UnderlinedLinks";
-import Logo from "public/logo.svg";
-import Image from "next/image";
-import { GoKebabHorizontal } from "react-icons/go";
-import { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const menuItems = [
+const NAV = [
+  { href: "/blog", label: "Blog" },
+  { href: "/snippet", label: "Snippet" },
+  { href: "/about", label: "About" },
+  { href: "/static/CV.pdf", label: "CV", external: true },
   {
-    name: "Blog",
-    href: "/",
-    mobile: false,
-  },
-  {
-    name: "Snippet",
-    href: "/snippet",
-    mobile: false,
-  },
-  {
-    name: "About",
-    href: "/about",
-    mobile: false,
-  },
-  {
-    name: "My resume",
-    href: "/static/CV.pdf",
-    mobile: false,
-  },
-  {
-    name: "Wordie game",
     href: "https://wordie-game.vercel.app/",
-    mobile: false,
+    label: "Wordie",
+    external: true,
   },
 ];
 
-const Header = () => {
+const SOCIALS = [{ href: "https://github.com/shoxie", label: "GitHub" }];
+
+/** Theme pill — same visual grammar as the portfolio's langswitch. */
+function ThemePill({ variant }: { variant?: "mob" }) {
   const { theme, setTheme } = useTheme();
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const headerContainer = useRef<HTMLDivElement>(null);
+  const pick = (t: "moon" | "dawn") => (
+    <button
+      type="button"
+      className={`langswitch__btn ${theme === t ? "is-active" : ""}`}
+      aria-pressed={theme === t}
+      onClick={() => setTheme(t)}
+    >
+      {variant === "mob"
+        ? t === "moon"
+          ? "Moon (tối)"
+          : "Dawn (sáng)"
+        : t === "moon"
+          ? "MOON"
+          : "DAWN"}
+    </button>
+  );
+  return (
+    <div
+      className={`langswitch ${variant === "mob" ? "langswitch--mob" : ""}`}
+      role="group"
+      aria-label="Theme / Giao diện"
+    >
+      {pick("moon")}
+      {pick("dawn")}
+    </div>
+  );
+}
+
+export default function Header() {
+  const [solid, setSolid] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const lastY = useRef(0);
+  const navOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!headerContainer) return;
-    setHeaderHeight(headerContainer.current?.clientHeight ?? 0);
-  }, [headerContainer]);
+    navOpenRef.current = navOpen;
+  }, [navOpen]);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setSolid(y > 40);
+      setHidden(navOpenRef.current ? false : y > lastY.current && y > 400);
+      lastY.current = y;
+      ticking = false;
+    };
+    const handler = () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  const closeNav = useCallback(() => setNavOpen(false), []);
+
+  useEffect(() => {
+    document.body.classList.toggle("is-locked", navOpen);
+    return () => document.body.classList.remove("is-locked");
+  }, [navOpen]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && navOpen) setNavOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navOpen]);
 
   return (
     <>
-      <header className="max-w-screen-xl px-10 py-5 mx-auto">
-        <div className="flex-row items-center justify-between hidden lg:flex">
-            <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              animate={{
-                x: 0,
-                opacity: 1,
-              }}
-            >
-            <Link href="/" className="text-2xl font-bold">
-              <Image src={Logo.src} alt="logo" width={50} height={50} />
-            </Link>
-            </motion.div>
-          <motion.div initial={{
-            opacity: 0,
-            x: 100,
-          }} 
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          className="flex-row items-center justify-center hidden space-x-5 lg:flex">
-            <UndelinedLinks items={menuItems} />
-            <div
-              onClick={() => setTheme(theme === "moon" ? "dawn" : "moon")}
-              className="relative w-10 h-5 text-xl"
-            >
-              <motion.button
-                type="button"
-                initial={{
-                  opacity: theme === "moon" ? 0 : 1,
-                  y: theme === "moon" ? 0 : 50,
-                }}
-                animate={{
-                  opacity: theme === "moon" ? 1 : 0,
-                  y: theme === "moon" ? 0 : 50,
-                  transition: {
-                    duration: 0.5,
-                  },
-                }}
-                className="absolute"
-                aria-label="light-theme-changer"
-              >
-                <BsFillSunFill className="text-yellow-400" />
-              </motion.button>
-              <motion.button
-                type="button"
-                initial={{
-                  opacity: theme === "dawn" ? 1 : 0,
-                  y: theme === "dawn" ? 0 : -50,
-                }}
-                animate={{
-                  opacity: theme === "dawn" ? 1 : 0,
-                  y: theme === "dawn" ? 0 : -50,
-                  transition: {
-                    duration: 0.5,
-                  },
-                }}
-                className="absolute"
-                aria-label="dark-theme-changer"
-              >
-                <BsFillMoonFill className="text-text" />
-              </motion.button>
+      <header
+        className={`header ${solid ? "is-solid" : ""} ${
+          hidden && !navOpen ? "is-hidden" : ""
+        }`}
+      >
+        <Link className="header__brand" href="/">
+          <span className="header__dot" />
+          <span className="header__name">WhiteRose</span>
+          <span className="header__alias">/ 白薔薇</span>
+        </Link>
+        <nav className="header__nav" aria-label="Primary">
+          {NAV.map((n) =>
+            n.external ? (
+              <a key={n.href} href={n.href} target="_blank" rel="noopener">
+                {n.label}
+              </a>
+            ) : (
+              <Link key={n.href} href={n.href}>
+                {n.label}
+              </Link>
+            ),
+          )}
+        </nav>
+        <ThemePill />
+        <button
+          className="header__burger"
+          aria-label={navOpen ? "Đóng menu" : "Mở menu"}
+          aria-expanded={navOpen}
+          aria-controls="mobileNav"
+          onClick={() => setNavOpen((v) => !v)}
+        >
+          <span />
+          <span />
+        </button>
+      </header>
+
+      <AnimatePresence>
+        {navOpen && (
+          <motion.div
+            id="mobileNav"
+            className="mobnav"
+            aria-hidden={!navOpen}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+          >
+            <nav className="mobnav__list">
+              {NAV.map((n, i) =>
+                n.external ? (
+                  <a
+                    key={n.href}
+                    href={n.href}
+                    target="_blank"
+                    rel="noopener"
+                    onClick={closeNav}
+                  >
+                    <em>0{i + 1}</em> <span>{n.label}</span>
+                  </a>
+                ) : (
+                  <Link key={n.href} href={n.href} onClick={closeNav}>
+                    <em>0{i + 1}</em> <span>{n.label}</span>
+                  </Link>
+                ),
+              )}
+            </nav>
+            <ThemePill variant="mob" />
+            <div className="mobnav__social">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={closeNav}
+                >
+                  {s.label}
+                </a>
+              ))}
             </div>
           </motion.div>
-        </div>
-        <div
-          className="flex items-center justify-between lg:hidden"
-          ref={headerContainer}
-        >
-          <button
-            type="button"
-            onClick={() => setMobileNavOpen(!mobileNavOpen)}
-          >
-            <GoKebabHorizontal />
-          </button>
-          <div>
-            <Link href="/" className="text-2xl font-bold">
-              <Image src={Logo.src} alt="logo" width={50} height={50} />
-            </Link>
-          </div>
-          <div
-            onClick={() => setTheme(theme === "moon" ? "dawn" : "moon")}
-            className="relative w-10 h-5 text-xl"
-          >
-            <motion.button
-              type="button"
-              initial={{
-                opacity: theme === "moon" ? 0 : 1,
-                y: theme === "moon" ? 0 : 50,
-              }}
-              animate={{
-                opacity: theme === "moon" ? 1 : 0,
-                y: theme === "moon" ? 0 : 50,
-                transition: {
-                  duration: 0.5,
-                },
-              }}
-              className="absolute"
-            >
-              <BsFillSunFill className="text-yellow-400" />
-            </motion.button>
-            <motion.button
-              type="button"
-              initial={{
-                opacity: theme === "dawn" ? 1 : 0,
-                y: theme === "dawn" ? 0 : -50,
-              }}
-              animate={{
-                opacity: theme === "dawn" ? 1 : 0,
-                y: theme === "dawn" ? 0 : -50,
-                transition: {
-                  duration: 0.5,
-                },
-              }}
-              className="absolute"
-            >
-              <BsFillMoonFill className="text-text" />
-            </motion.button>
-          </div>
-        </div>
-      </header>
-      <AnimatePresence>
-        <motion.div
-          style={{
-            height: `calc(100vh - ${headerHeight}px)`,
-            marginTop: ``,
-          }}
-          className="fixed left-0 w-screen bg-black lg:hidden bg-opacity-80"
-          animate={{
-            zIndex: mobileNavOpen ? 1000 : -1,
-            opacity: mobileNavOpen ? 100 : 0,
-          }}
-        >
-          <div className="flex flex-col space-y-5">
-            {menuItems.map((nav, idx) => (
-              <Link key={nav.name} href={nav.href} legacyBehavior>
-                <motion.a
-                  key={nav.name}
-                  className={classNames(
-                    "px-12 py-4 transform ease-in-out duration-300 font-bold text-xl",
-                    mobileNavOpen ? "translate-x-0" : "-translate-x-full"
-                  )}
-                  style={{
-                    transitionDelay: `${(idx + 1) * 100}ms`,
-                  }}
-                >
-                  {nav.name}
-                </motion.a>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
+        )}
       </AnimatePresence>
     </>
   );
-};
-
-export default Header;
+}

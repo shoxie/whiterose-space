@@ -12,6 +12,14 @@ const nextConfig = {
     locales: ["vi"],
     defaultLocale: "vi",
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "static0.gamerantimages.com",
+      },
+    ],
+  },
   ...(process.env.BUILD_STANDALONE === "true" && { output: "standalone" }),
 };
 

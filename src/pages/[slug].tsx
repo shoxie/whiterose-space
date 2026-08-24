@@ -11,10 +11,13 @@ export default function Pages({ page }: { page: Page }) {
     <PagesLayout>
       <article>
         <NextSeo title={page.title} description={page.description} />
-        <h1 className="mb-4 text-sm font-bold tracking-tight uppercase text-text">
-          Home / {page.title}
-        </h1>
-        <p className="mt-2 mb-8 text-subtle">{page.description}</p>
+        <header className="mb-10">
+          <p className="secnum">TRANG — {page.slug.toUpperCase()}</p>
+          <h1 className="h2">{page.title}</h1>
+          <p className="max-w-[62ch] text-[15px] leading-[1.75] text-[var(--muted)]">
+            {page.description}
+          </p>
+        </header>
         <div className="w-full prose dark:prose-dark">
           <Component components={components} />
         </div>

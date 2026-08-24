@@ -44,3 +44,9 @@ yarn-error.log*
 AGENTS.md
 .opencode/
 scripts/
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

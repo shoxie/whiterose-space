@@ -2,14 +2,17 @@ import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { DefaultSeo } from "next-seo";
-import { AnimatePresence, motion } from "framer-motion";
-import { Analytics } from '@vercel/analytics/react';
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react";
+import { Grain, Scanline } from "@/common/Overlays";
 
 function MyApp({
   Component,
   pageProps,
   router,
 }: AppProps & { Component: { Layout?: any } }) {
+  const reduced = useReducedMotion();
+
   function DefaultLayout({ children }: { children: React.ReactNode }) {
     return children;
   }
@@ -21,22 +24,21 @@ function MyApp({
       defaultTheme="moon"
       themes={["moon", "dawn"]}
     >
-      <AnimatePresence initial={false}>
+      <Grain />
+      <Scanline />
+      <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={router.asPath}
-          initial={{
-            opacity: 0,
-            y: 50,
-          }}
-          layout
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
+          initial={reduced ? false : { opacity: 0, y: 20 }}
+          animate={reduced ? undefined : { opacity: 1, y: 0 }}
+          exit={reduced ? undefined : { opacity: 0, y: -12 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
         >
           <Layout>
             <DefaultSeo
               defaultTitle="WhiteRose Space"
               titleTemplate={`%s - WhiteRose Space`}
-              description="A frontend developer who likes to build beautiful and functional things."
+              description="Blog của một cựu web developer, giờ là ServiceNow developer. Viết về code và những thứ linh tinh."
               robotsProps={{
                 nosnippet: true,
                 notranslate: true,
@@ -71,7 +73,7 @@ function MyApp({
                 {
                   rel: "mask-icon",
                   href: "/static/favicon/safari-pinned-tab.svg",
-                  color: "#5bbad5",
+                  color: "#E0A244",
                 },
                 {
                   rel: "alternate",
@@ -93,7 +95,7 @@ function MyApp({
                 images: [
                   {
                     url: "https://wrosedev.tech/static/images/socialbanner.png",
-                    alt: "Banner",
+                    alt: "WhiteRose Space",
                   },
                 ],
               }}
