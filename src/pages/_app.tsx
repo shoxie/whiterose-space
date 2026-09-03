@@ -87,8 +87,7 @@ function MyApp({
                 url: "https://wrosedev.tech",
                 site_name: "WhiteRose Space",
                 profile: {
-                  firstName: "Đào",
-                  lastName: "Tuấn Anh",
+                  firstName: "whiterose",
                   username: "whiterose.uchiha",
                   gender: "male",
                 },

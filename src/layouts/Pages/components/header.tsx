@@ -102,8 +102,8 @@ export default function Header() {
       >
         <Link className="header__brand" href="/">
           <span className="header__dot" />
-          <span className="header__name">WhiteRose</span>
-          <span className="header__alias">/ 白薔薇</span>
+          <span className="header__name">Tuan Anh</span>
+          <span className="header__alias">/ whiterose</span>
         </Link>
         <nav className="header__nav" aria-label="Primary">
           {NAV.map((n) =>
