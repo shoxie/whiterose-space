@@ -35,8 +35,8 @@ export default function Footer() {
     <footer className="footer">
       <div className="wrap footer__in">
         <div className="footer__l">
-          <span className="footer__brand">WhiteRose</span>
-          <span className="footer__alias">白薔薇</span>
+          <span className="footer__brand">Tuan Anh</span>
+          <span className="footer__alias">whiterose</span>
         </div>
         <p className="footer__c flex items-center gap-2">
           {data?.isPlaying ? (

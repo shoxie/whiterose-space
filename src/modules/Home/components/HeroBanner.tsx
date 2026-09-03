@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const Texts = [
-  "Hello, I'm WhiteRose",
+  "Hello, I'm Tuan Anh",
   "I'm a frontend developer",
   "I don't know what to put here",
   "Please help me improve this :(",

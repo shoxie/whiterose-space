@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { NextSeo } from "next-seo";
 import Header from "@/layouts/Pages/components/header";
@@ -42,6 +43,49 @@ const TitleLine = ({
 
 export default function HomePage() {
   const reduced = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Start paused when the user prefers reduced motion.
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (reduced) {
+      setPaused(true);
+      videoRef.current?.pause();
+    }
+  }, [reduced]);
+
+  // Pause the ambient loop while the hero is off-screen (data + battery).
+  useEffect(() => {
+    if (reduced) return;
+    const video = videoRef.current;
+    if (!video || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!videoRef.current) return;
+        if (entry.isIntersecting) {
+          if (!paused) videoRef.current.play().catch(() => {});
+        } else {
+          videoRef.current.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(video);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduced]);
+
+  const toggleVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play().catch(() => {});
+      setPaused(false);
+    } else {
+      video.pause();
+      setPaused(true);
+    }
+  };
 
   const row = (key: string) => (
     <>
@@ -57,7 +101,7 @@ export default function HomePage() {
   return (
     <>
       <NextSeo
-        title="WhiteRose Space — Đào Tuấn Anh"
+        title="WhiteRose Space — whiterose"
         description="Blog của một cựu web developer, giờ là ServiceNow developer. Viết về code và những thứ linh tinh."
       />
       <div id="top">
@@ -67,6 +111,32 @@ export default function HomePage() {
       <main>
         <section className="hero">
           <div className="hero__media">
+            {reduced ? (
+              // Decorative full-bleed backdrop: plain <img> avoids next/image wrapper overhead.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="hero__bg"
+                src="/hero-drone-poster.jpg"
+                alt=""
+                aria-hidden="true"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                className="hero__bg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                poster="/hero-drone-poster.jpg"
+                aria-hidden="true"
+                tabIndex={-1}
+                disablePictureInPicture
+              >
+                <source src="/hero-drone.mp4" type="video/mp4" />
+              </video>
+            )}
             <div
               className="absolute inset-0"
               style={{
@@ -86,14 +156,14 @@ export default function HomePage() {
             </p>
             <h1 className="hero__title">
               <TitleLine reduced={reduced} delay={0}>
-                White
+                Tuan
               </TitleLine>
               <TitleLine reduced={reduced} delay={0.1}>
-                Rose
+                Anh
               </TitleLine>
             </h1>
             <p className="hero__alias">
-              <span className="br">[</span>&nbsp;Đào Tuấn Anh&nbsp;
+              <span className="br">[</span>&nbsp;whiterose&nbsp;
               <span className="br">]</span>
             </p>
             <p className="hero__lede">
@@ -133,6 +203,29 @@ export default function HomePage() {
               <span className="k">Trạng thái</span>
               <span className="v">Đang viết bài mới</span>
             </div>
+            {!reduced && (
+              <button
+                type="button"
+                className="hero__videotoggle"
+                onClick={toggleVideo}
+                aria-pressed={paused}
+                aria-label={paused ? "Phát video nền" : "Tạm dừng video nền"}
+                title={paused ? "Phát video nền" : "Tạm dừng video nền"}
+              >
+                {paused ? (
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path d="M8 5v14l11-7z" fill="currentColor" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path
+                      d="M7 5h4v14H7zM13 5h4v14h-4z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                )}
+              </button>
+            )}
           </div>
 
           <a className="hero__scroll" href="#more" aria-label="Cuộn xuống">
